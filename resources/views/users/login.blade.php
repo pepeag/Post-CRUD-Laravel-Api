@@ -1,0 +1,83 @@
+@extends('layouts.master')
+@section('content')
+    <form class="mt-5" id="login-form">
+        <!-- Email input -->
+        <div class="form-outline mb-4">
+            <label class="form-label" for="email">Email address</label>
+            <input type="email" id="email" class="form-control" />
+        </div>
+
+        <!-- Password input -->
+        <div class="form-outline mb-4">
+            <label class="form-label" for="password">Password</label>
+            <input type="password" id="password" class="form-control" />
+        </div>
+
+        <!-- 2 column grid layout for inline styling -->
+        {{-- <div class="row mb-4">
+    <div class="col d-flex justify-content-center">
+      <!-- Checkbox -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="form2Example31" checked />
+        <label class="form-check-label" for="form2Example31"> Remember me </label>
+      </div>
+    </div>
+
+    <div class="col">
+      <!-- Simple link -->
+      <a href="#!">Forgot password?</a>
+    </div>
+  </div> --}}
+
+        <!-- Submit button -->
+        <button id="login-btn" class="btn btn-primary btn-block mb-4">Sign in</button>
+
+        <!-- Register buttons -->
+        <div class="text-center">
+            <p>Not a member? <a href="{{ url('api/register-page/') }}">Register</a></p>
+            {{-- <button type="button" class="btn btn-link btn-floating mx-1">
+      <i class="fab fa-facebook-f"></i>
+    </button>
+
+    <button type="button" class="btn btn-link btn-floating mx-1">
+      <i class="fab fa-google"></i>
+    </button>
+
+    <button type="button" class="btn btn-link btn-floating mx-1">
+      <i class="fab fa-twitter"></i>
+    </button>
+
+    <button type="button" class="btn btn-link btn-floating mx-1">
+      <i class="fab fa-github"></i>
+    </button> --}}
+        </div>
+    </form>
+
+    <script>
+        $(document).ready(function() {
+
+            $("#login-form").on('submit', function(e) {
+                let token = localStorage.getItem('user-token');
+                e.preventDefault();
+                $.ajax({
+                    url: "http://localhost:8000/api/login",
+                    method: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                        'Authorization': 'Bearer ' + token
+                    },
+                    data: {
+                        email: $("#email").val(),
+                        password: $("#password").val(),
+                    },
+                }).done(function(token) {
+                    // console.log(localStorage.getItem('user-token'))
+                    window.location = "api/post-list"
+
+                }).fail(function(err) {
+                    console.log(err.responseJSON.errors);
+                })
+            })
+        });
+    </script>
+@endsection
