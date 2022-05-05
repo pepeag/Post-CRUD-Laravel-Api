@@ -1,9 +1,9 @@
 @extends('layouts.master')
 
 @section('content')
-<div class="mb-3 me-3 mt-0 float-end" style="clear: both;display: block;content: '';">
+<div class="mb-3 mt-5 me-3 mt-0 float-end" style="clear: both;display: block;content: '';">
     <button class="btn btn-primary show-form-modal"> <i class="fa fa-plus"></i> Add
-        Student</button>
+        Post</button>
 </div>
     <table class="table mt-3 table-striped">
         <thead>
@@ -60,20 +60,18 @@
         $("#form").on('submit', function (e) {
             e.preventDefault();
             $.ajax({
-                url: "/api/students",
+                url: "/api/posts",
                 method: "POST",
                 headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    'Authorization': 'Bearer '+token
                 },
                 data: {
-                    name: $("#name").val(),
-                    email: $("#email").val(),
-                    date_of_birth: $("#date_of_birth").val(),
-                    major_id: $("#major_id").val(),
-                    address: $("#address").val(),
+                    title: $("#title").val(),
+                    description: $("#description").val(),
                 },
             }).done(function () {
-                window.location = '/spa/students';
+                window.location = '/api/post-list';
             }).fail(function (err) {
                 console.log(err.responseJSON.errors);
             })
