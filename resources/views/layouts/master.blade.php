@@ -13,12 +13,46 @@
 <body>
     <div class="container">
         <div class="row">
+            <div class="col-12 mx-auto">
+                <div>
+                    <h4 id="user_profile_name"></h4>
+                </div>
+            </div>
             <div class="col-md-4 mx-auto">
                 @yield("content")
             </div>
         </div>
     </div>
-    
+
+    <script>
+        $(document).ready(function() {
+            let url = window.location.href;
+            if (!url.includes("login") && !url.includes("register")) {
+                let token = localStorage.getItem("user-token");
+                $.ajax({
+                    url: "http://localhost:8000/api/get-user",
+                    contentType: "application/json",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                        'Authorization': 'Bearer ' + token
+                    },
+                    success: function({
+                        user
+                    }) {
+                        $("#user_profile_name").text(user.name);
+                    },
+                    error: function({
+                        status
+                    }) {
+                        if (status === 401) {
+                            localStorage.removeItem("user-token");
+                            window.location.href = "/api/login-page";
+                        }
+                    }
+                })
+            }
+        })
+    </script>
 </body>
 
 </html>

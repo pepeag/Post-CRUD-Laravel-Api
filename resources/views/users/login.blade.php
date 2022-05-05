@@ -71,6 +71,7 @@
                         password: $("#password").val(),
                     },
                 }).done(function(token) {
+                  localStorage.setItem("user-token", token.token);
                     // console.log(localStorage.getItem('user-token'))
                     window.location = "api/post-list"
 

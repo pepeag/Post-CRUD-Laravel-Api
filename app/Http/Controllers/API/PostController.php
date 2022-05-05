@@ -16,7 +16,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+        $posts = Post::whereUserId(auth()->id())->latest()->get();
         return response()->json([
             "success" => true,
             "message" => "Post List",
@@ -39,7 +39,7 @@ class PostController extends Controller
         if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
         }
-        $post = Post::create($input);
+        $post = Post::create(array_merge($input, ["user_id" => auth()->id()]));
         return response()->json([
             "success" => true,
             "message" => "post created successfully.",
