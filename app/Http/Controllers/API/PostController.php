@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
@@ -17,6 +18,23 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::whereUserId(auth()->id())->latest()->get();
+
+        return response()->json([
+            "success" => true,
+            "message" => "Post List",
+            "data" => $posts
+        ]);
+    }
+
+    public function search(Request $request)
+    {
+        $posts = Post::whereUserId(auth()->user()->id)->where(function($q) use($request){
+            if($request->filled("text")){
+                $keyword = $request->get('text');
+                $q->where("title", "LIKE", "%{$keyword}%")->orWhere("description", "LIKE", "%{$keyword}%");
+            }
+        })->latest()->get();
+
         return response()->json([
             "success" => true,
             "message" => "Post List",
@@ -36,8 +54,13 @@ class PostController extends Controller
             'title' => 'required',
             'description' => 'required'
         ]);
-        if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors());
+        // if ($validator->fails()) {
+        //     return $this->sendError('Validation Error.', $validator->errors());
+        // }
+        if($validator->fails()){
+            return response()->json([
+                "error" => $validator->errors()
+            ]);
         }
         $post = Post::create(array_merge($input, ["user_id" => auth()->id()]));
         return response()->json([
@@ -78,7 +101,7 @@ class PostController extends Controller
             'title' => 'required',
             'description' => 'required'
         ]);
-      
+
         if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
         }

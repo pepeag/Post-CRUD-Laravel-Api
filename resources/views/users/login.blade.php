@@ -35,21 +35,6 @@
         <!-- Register buttons -->
         <div class="text-center">
             <p>Not a member? <a href="{{ url('api/register-page/') }}">Register</a></p>
-            {{-- <button type="button" class="btn btn-link btn-floating mx-1">
-      <i class="fab fa-facebook-f"></i>
-    </button>
-
-    <button type="button" class="btn btn-link btn-floating mx-1">
-      <i class="fab fa-google"></i>
-    </button>
-
-    <button type="button" class="btn btn-link btn-floating mx-1">
-      <i class="fab fa-twitter"></i>
-    </button>
-
-    <button type="button" class="btn btn-link btn-floating mx-1">
-      <i class="fab fa-github"></i>
-    </button> --}}
         </div>
     </form>
 
@@ -73,7 +58,7 @@
                 }).done(function(token) {
                   localStorage.setItem("user-token", token.token);
                     // console.log(localStorage.getItem('user-token'))
-                    window.location = "api/post-list"
+                    window.location = "/api/post-list"
 
                 }).fail(function(err) {
                     console.log(err.responseJSON.errors);

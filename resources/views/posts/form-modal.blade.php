@@ -9,17 +9,21 @@
                 <form id="form">
                     @csrf
                     <div class="mb-3">
-                        <label class="form-label"><Title></Title></label>
+                        <label class="form-label">Title</label>
                         <input type="text" name="title" id="title" class="form-control" value=""
                             placeholder="Enter Title">
-                        <small class="text-danger form-error fade" data-error="name"></small>
+                            <span class="text-danger">
+                                <strong id="title-error"></strong>
+                            </span>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Description</label>
                         <input type="text" name="description" id="description" class="form-control" value=""
                             placeholder="Enter description">
-                        <small class="text-danger form-error fade" data-error="description"></small>
+                            <span class="text-danger">
+                                <strong id="description-error"></strong>
+                            </span>
                     </div>
                     <button class="btn btn-primary float-end" id="formModalButton">Add Post</button>
                 </form>

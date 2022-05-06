@@ -33,5 +33,5 @@ Route::get('post-list', function(){
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('/posts', PostController::class);
     Route::get('get-user', [PassportAuthController::class, 'userInfo']);
-    
+    Route::get('/search', [PostController::class, 'search']);
 });

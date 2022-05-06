@@ -13,12 +13,8 @@
 <body>
     <div class="container">
         <div class="row">
-            <div class="col-12 mx-auto">
-                <div>
-                    <h4 id="user_profile_name"></h4>
-                </div>
-            </div>
             <div class="col-md-4 mx-auto">
+                
                 @yield("content")
             </div>
         </div>
