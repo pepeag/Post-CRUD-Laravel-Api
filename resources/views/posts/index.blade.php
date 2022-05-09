@@ -5,8 +5,12 @@
         <button class="btn btn-primary show-form-modal"> <i class="fa fa-plus"></i> Add
             Post</button>
     </div>
+    <div class="mb-3 mt-2 mt-0 float-end" style="clear: both;display: block;content: '';">
+        <button class="btn btn-success import-csv"> <i class="fa fa-plus"></i> Import
+            CSV</button>
+    </div>
     <div class="mt-2">
-        <a href="" class="text-decoration-none"><button class="btn btn-success"><span
+        <a href="" class="text-decoration-none"><button class="btn btn-info"><span
                     id="user_profile_name"></span></button></a>
     </div>
     <table class="table mt-3 table-striped">
@@ -32,6 +36,7 @@
     @include('posts.form-modal')
     @include('posts.edit-form-modal')
     @include('posts.delete-modal')
+    @include('posts.import-form-modal')
     <script>
         $(document).ready(function() {
             let token = localStorage.getItem('user-token');
@@ -112,8 +117,8 @@
                 $("#formModal").modal('show');
 
                 $("#form").on('submit', function(e) {
-                    $( '#title-error' ).html( "" );
-                    $( '#description-error' ).html( "" );
+                    $('#title-error').html("");
+                    $('#description-error').html("");
                     e.preventDefault();
                     $.ajax({
                         url: "/api/posts",
@@ -126,17 +131,16 @@
                             title: $("#title").val(),
                             description: $("#description").val(),
                         },
-                        success:function(data){
+                        success: function(data) {
                             console.log(data.error)
-                            if(data.error) {
-                   
-                        $( '#title-error' ).html( data.error.title[0] );
-                        $( '#description-error' ).html( data.error.description[0] );
-                    }
-                    if(data.success){
-                        window.location = "/api/post-list"
-                    }
-                    
+                            if (data.error) {
+
+                                $('#title-error').html(data.error.title[0]);
+                                $('#description-error').html(data.error.description[0]);
+                            }
+                            if (data.success) {
+                                window.location = "/api/post-list"
+                            }
                         }
                     })
                 })
@@ -202,7 +206,33 @@
                 })
             })
 
-
+            $(document).on('click', '.import-csv', function() {
+                $('#import-modal').modal('show');
+                $("#import-form").on('submit', function(e) {
+                    e.preventDefault();
+                    var formData = new FormData(this);
+                    $.ajax({
+                        url: "http://localhost:8000/api/import",
+                        method: "POST",
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                            'Authorization': 'Bearer ' + token
+                        },
+                        data: formData,
+                        enctype: 'multipart/form-data',
+                        success: function(data) {
+                            alert(data.message)
+                            window.location = "/api/post-list"
+                        },
+                        error: function() {
+                            console.log("error");
+                        }
+                    })
+                })
+            });
         });
     </script>
 @endsection

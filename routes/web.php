@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,5 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('users.login');
 });
+
+
 
 

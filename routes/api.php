@@ -1,10 +1,11 @@
 <?php
-use Illuminate\Support\Facades\Route;
+use App\Models\User;
 
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Request;
 use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\API\PassportAuthController;
-use App\Models\User;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,8 +31,16 @@ Route::get('post-list', function(){
     return view('posts.index');
 });
 
+Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
+Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post'); 
+Route::get('reset-password/{token}', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset.password.get');
+Route::post('reset-password', [ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');
+
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('/posts', PostController::class);
     Route::get('get-user', [PassportAuthController::class, 'userInfo']);
     Route::get('/search', [PostController::class, 'search']);
+    Route::get('export', [PostController::class, 'export']);
+    Route::post('import',[PostController::class, 'import']);
 });

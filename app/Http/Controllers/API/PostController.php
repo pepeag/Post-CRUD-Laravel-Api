@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\Post;
+use App\Export\PostsExport;
+use App\Import\PostsImport;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
@@ -54,9 +57,6 @@ class PostController extends Controller
             'title' => 'required',
             'description' => 'required'
         ]);
-        // if ($validator->fails()) {
-        //     return $this->sendError('Validation Error.', $validator->errors());
-        // }
         if($validator->fails()){
             return response()->json([
                 "error" => $validator->errors()
@@ -129,4 +129,18 @@ class PostController extends Controller
             "data" => $post
         ]);
     }
+
+    public function import(Request $request){
+        Post::truncate();
+        $data = $request->file('file');
+        Excel::import(new PostsImport, $data);
+        return response()->json([
+            "success" => true,
+            "message" => "post csv import successfully.",
+        ]);
+    }
+
+    // public function export(){
+    //     return Excel::download(new PostsExport, 'post-data.csv');
+    // }
 }

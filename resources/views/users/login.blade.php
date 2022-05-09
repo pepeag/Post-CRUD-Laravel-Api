@@ -37,12 +37,23 @@
             <p>Not a member? <a href="{{ url('api/register-page/') }}">Register</a></p>
         </div>
     </form>
+    
+    <div class="form-group row">
+        <div class="col-md-6 offset-md-4">
+            <div class="checkbox">
+                <label>
+                    <button class="btn btn-primary reset-password">Reset Password</button>
+                </label>
+            </div>
+        </div>
+    </div>
+
 
     <script>
         $(document).ready(function() {
-
+            let token = localStorage.getItem('user-token');
             $("#login-form").on('submit', function(e) {
-                let token = localStorage.getItem('user-token');
+                
                 e.preventDefault();
                 $.ajax({
                     url: "http://localhost:8000/api/login",
@@ -56,14 +67,15 @@
                         password: $("#password").val(),
                     },
                 }).done(function(token) {
-                  localStorage.setItem("user-token", token.token);
+                    localStorage.setItem("user-token", token.token);
                     // console.log(localStorage.getItem('user-token'))
                     window.location = "/api/post-list"
 
                 }).fail(function(err) {
                     console.log(err.responseJSON.errors);
                 })
-            })
+            });
+            
         });
     </script>
 @endsection
