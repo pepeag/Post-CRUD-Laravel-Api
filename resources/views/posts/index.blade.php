@@ -5,6 +5,13 @@
         <button class="btn btn-primary show-form-modal"> <i class="fa fa-plus"></i> Add
             Post</button>
     </div>
+
+    <form id="logout-form">
+        <div class="mb-3 mt-2 mt-0 float-end" style="clear: both;display: block;content: '';">
+            <button class="btn btn-primary logout"> Logout </button>
+        </div>
+    </form>
+
     <div class="mb-3 mt-2 mt-0 float-end" style="clear: both;display: block;content: '';">
         <button class="btn btn-success import-csv"> <i class="fa fa-plus"></i> Import
             CSV</button>
@@ -146,7 +153,6 @@
                 })
             });
 
-
             $(document).on('click', '.edit', function() {
                 let id = $(this).data("id");
                 $.ajax({
@@ -233,6 +239,26 @@
                     })
                 })
             });
+
+            $("#logout-form").on('submit', function(e) {
+                    e.preventDefault();
+                    $.ajax({
+                        url: "http://localhost:8000/api/logout",
+                        method: "POST",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                            // 'Authorization': 'Bearer ' + token
+                        },
+                        success: function(data) {
+                            window.localStorage.removeItem("user-token");
+                            alert(data.message);
+                            window.location = "/api/login-page"
+                        },
+                        error: function() {
+                            console.log("error");
+                        }
+                    })
+                })
         });
     </script>
 @endsection

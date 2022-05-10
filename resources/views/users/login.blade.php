@@ -13,22 +13,6 @@
             <input type="password" id="password" class="form-control" />
         </div>
 
-        <!-- 2 column grid layout for inline styling -->
-        {{-- <div class="row mb-4">
-    <div class="col d-flex justify-content-center">
-      <!-- Checkbox -->
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="" id="form2Example31" checked />
-        <label class="form-check-label" for="form2Example31"> Remember me </label>
-      </div>
-    </div>
-
-    <div class="col">
-      <!-- Simple link -->
-      <a href="#!">Forgot password?</a>
-    </div>
-  </div> --}}
-
         <!-- Submit button -->
         <button id="login-btn" class="btn btn-primary btn-block mb-4">Sign in</button>
 
@@ -37,7 +21,7 @@
             <p>Not a member? <a href="{{ url('api/register-page/') }}">Register</a></p>
         </div>
     </form>
-    
+
     <div class="form-group row">
         <div class="col-md-6 offset-md-4">
             <div class="checkbox">
@@ -47,13 +31,12 @@
             </div>
         </div>
     </div>
-
-
+    @include('users.forget-password')
     <script>
         $(document).ready(function() {
             let token = localStorage.getItem('user-token');
             $("#login-form").on('submit', function(e) {
-                
+
                 e.preventDefault();
                 $.ajax({
                     url: "http://localhost:8000/api/login",
@@ -75,7 +58,31 @@
                     console.log(err.responseJSON.errors);
                 })
             });
-            
+
+            $(document).on('click', '.reset-password', function() {
+                $('#forget-modal').modal('show');
+                $("#forget-form").on('submit', function(e) {
+                    e.preventDefault();
+                $.ajax({
+                    url:"http://localhost:8000/api/forgot",
+                    method: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                        'Authorization': 'Bearer ' + token
+                    },
+                    data:{
+                        forgetemail:$('#forgetemail').val()
+                    },
+                    success:function(data){
+                        alert(data.message);
+                        window.location = "/api/login-page/"
+                    },
+                    error:function(){
+                        console.log("error")
+                    }
+                })
+            })
+            })
         });
     </script>
 @endsection

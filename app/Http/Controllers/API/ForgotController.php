@@ -16,7 +16,7 @@ class ForgotController extends Controller
 {
     public function forgot(ForgotRequest $request)
     {
-        $email = $request->input('email');
+        $email = $request->forgetemail;
         $token = Str::random(10);
         try {
 
@@ -58,8 +58,11 @@ class ForgotController extends Controller
         $user->save();
 
         return response([
-            'message' => "success",
+            'message' => "Password Reset Successfully",
         ]);
 
+    }
+    public function resetLink($token){
+        return view('users.forget-link',['token' => $token]);
     }
 }

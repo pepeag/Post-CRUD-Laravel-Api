@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class PassportAuthController extends Controller
 {
@@ -66,5 +67,12 @@ class PassportAuthController extends Controller
         $user = auth()->user();
 
         return response()->json(['user' => $user], 200);
+    }
+
+    public function logout(){
+        Auth::logout();
+        return response([
+            'message' => 'User Logout Successfully'
+        ]);
     }
 }
