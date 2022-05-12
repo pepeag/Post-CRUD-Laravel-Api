@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.master-layout')
 
 @section('content')
     <div class="mb-3 mt-2 mt-0 float-end" style="clear: both;display: block;content: '';">

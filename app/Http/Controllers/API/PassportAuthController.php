@@ -21,6 +21,7 @@ class PassportAuthController extends Controller
             'email' => 'required|email',
             'password' => 'required|min:8',
         ]);
+        
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -30,7 +31,6 @@ class PassportAuthController extends Controller
         $token = $user->createToken('Laravel8PassportAuth')->plainTextToken;
         // return $token;
         return response()->json(['token' => $token], 200);
-
     }
 
     /**
@@ -45,7 +45,7 @@ class PassportAuthController extends Controller
 
         if (auth()->attempt($data)) {
             $token = auth()->user()->createToken('Laravel8PassportAuth')->plainTextToken;
-          return response()->json(['token' => $token], 200);
+            return response()->json(['token' => $token], 200);
         } else {
             return response()->json(['error' => 'Unauthorised'], 401);
         }
@@ -69,7 +69,8 @@ class PassportAuthController extends Controller
         return response()->json(['user' => $user], 200);
     }
 
-    public function logout(){
+    public function logout()
+    {
         Auth::logout();
         return response([
             'message' => 'User Logout Successfully'

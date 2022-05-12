@@ -20,7 +20,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::whereUserId(auth()->id())->latest()->get();
+        $posts = Post::whereUserId(auth()->user()->id)->latest()->get();
 
         return response()->json([
             "success" => true,
@@ -31,8 +31,8 @@ class PostController extends Controller
 
     public function search(Request $request)
     {
-        $posts = Post::whereUserId(auth()->user()->id)->where(function($q) use($request){
-            if($request->filled("text")){
+        $posts = Post::whereUserId(auth()->user()->id)->where(function ($q) use ($request) {
+            if ($request->filled("text")) {
                 $keyword = $request->get('text');
                 $q->where("title", "LIKE", "%{$keyword}%")->orWhere("description", "LIKE", "%{$keyword}%");
             }
@@ -57,12 +57,12 @@ class PostController extends Controller
             'title' => 'required',
             'description' => 'required'
         ]);
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 "error" => $validator->errors()
             ]);
         }
-        $post = Post::create(array_merge($input, ["user_id" => auth()->id()]));
+        $post = Post::create(array_merge($input, ['user_id' => auth()->user()->id]));
         return response()->json([
             "success" => true,
             "message" => "post created successfully.",
@@ -130,7 +130,8 @@ class PostController extends Controller
         ]);
     }
 
-    public function import(Request $request){
+    public function import(Request $request)
+    {
         Post::truncate();
         $data = $request->file('file');
         Excel::import(new PostsImport, $data);
@@ -139,8 +140,4 @@ class PostController extends Controller
             "message" => "post csv import successfully.",
         ]);
     }
-
-    // public function export(){
-    //     return Excel::download(new PostsExport, 'post-data.csv');
-    // }
 }

@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.master-layout')
 @section('content')
     <form class="mt-5" id="reg-form">
       @csrf

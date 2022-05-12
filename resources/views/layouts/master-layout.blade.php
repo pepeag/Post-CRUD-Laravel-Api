@@ -9,6 +9,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
+
 <body>
     <div class="container">
         <div class="row">
@@ -21,6 +22,7 @@
         $(document).ready(function() {
             let url = window.location.href;
             if (!url.includes("login") && !url.includes("register")) {
+
                 let token = localStorage.getItem("user-token");
                 $.ajax({
                     url: "http://localhost:8000/api/get-user",
